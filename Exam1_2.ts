@@ -1,4 +1,4 @@
-const arr :number[]= [6, 4, 3, 1, 9, 44, 33, 2];
+const arr = [6, 4, 3, 1, 9, 44, 33, 2];
 function bubbleSort(array: number[]) : number[]{   
     let done = false;
     let counter = 0;
