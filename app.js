@@ -1,3 +1,2 @@
 console.log("op");
-var button = document.querySelector("button");
-sdvsfdvs
+var text = "jj";
