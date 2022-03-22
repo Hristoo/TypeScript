@@ -11,9 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/Hristoo/TypeScript.git"
   },
-  "skipFiles": [
-    "TypeScript/node_modules"
-  ],
+
   "author": "Hristo",
   "license": "ISC",
   "bugs": {
