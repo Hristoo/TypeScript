@@ -13,3 +13,19 @@ function findOdd(arr: number[]): number {
 }
 
 console.log(findOdd(arr));
+
+enum rest {
+  get = "Get",
+  post = "Post",
+  put = "Put",
+  delete = "Delete",
+}
+
+const obj = {
+  name: "Ico",
+};
+
+function test(obj): void {
+  console.log(obj.name);
+}
+

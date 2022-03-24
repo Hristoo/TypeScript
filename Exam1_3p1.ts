@@ -1,4 +1,4 @@
-function generatePyramid(input) {
+function generatePyramid(input: number): void {
     let output = '';
     for (let i = 1; i <= input; i++) {
         for (let j = 1; j <= i; j++) {
@@ -7,6 +7,7 @@ function generatePyramid(input) {
         console.log(output);
         output = '';
     }
+    
 }
-generatePyramid(6);
-//# sourceMappingURL=Exam1_3.js.map
+
+generatePyramid(4);

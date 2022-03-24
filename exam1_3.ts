@@ -1,4 +1,4 @@
-function generatePyramid(input): void {
+function generatePyramid(input: number): void {
     let output = '';
     for (let i = 1; i <= input; i++) {
         for (let j = 1; j <= i; j++) {
@@ -9,4 +9,4 @@ function generatePyramid(input): void {
     }
 }
 
-generatePyramid(5);
+generatePyramid(6);

@@ -1,14 +1,12 @@
-var arr = [6, 4, 3, 1, 9, 44, 33, 2];
+const arr = [6, 4, 3, 1, 9, 44, 33, 2];
 function bubbleSort(array) {
-    var done = false;
-    var counter = 0;
-    while (!done) {
-        done = true;
-        for (var i = 1; i < array.length; i += 1) {
-            counter++;
+    let isDone = false;
+    while (!isDone) {
+        isDone = true;
+        for (let i = 1; i < array.length; i += 1) {
             if (array[i - 1] > array[i]) {
-                done = false;
-                var tmp = array[i - 1];
+                isDone = false;
+                const tmp = array[i - 1];
                 array[i - 1] = array[i];
                 array[i] = tmp;
             }
@@ -17,3 +15,4 @@ function bubbleSort(array) {
     return array;
 }
 console.log(bubbleSort(arr), "hd");
+//# sourceMappingURL=Exam1_2.js.map

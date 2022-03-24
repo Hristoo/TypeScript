@@ -8,5 +8,5 @@ function generatePyramid(input) {
         output = '';
     }
 }
-generatePyramid(6);
-//# sourceMappingURL=Exam1_3.js.map
+generatePyramid(4);
+//# sourceMappingURL=Exam1_3p1.js.map
