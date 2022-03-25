@@ -13,27 +13,21 @@ function printEmployeeInfo(emp) {
         console.log(emp.startDate);
     }
 }
-var Car = /** @class */ (function () {
-    function Car() {
-    }
-    Car.prototype.drive = function () {
+class Car {
+    drive() {
         console.log("Driving...");
-    };
-    return Car;
-}());
-var Truck = /** @class */ (function () {
-    function Truck() {
     }
-    Truck.prototype.drive = function () {
+}
+class Truck {
+    drive() {
         console.log("Driving a truck...");
-    };
-    Truck.prototype.loadingCargo = function (amount) {
-        console.log("Driving...".concat(amount));
-    };
-    return Truck;
-}());
-var vehicle1 = new Car();
-var vehicle2 = new Truck();
+    }
+    loadingCargo(amount) {
+        console.log(`Driving...${amount}`);
+    }
+}
+const vehicle1 = new Car();
+const vehicle2 = new Truck();
 function useVehicle(vehicle) {
     vehicle.drive();
     if (vehicle instanceof Truck) {
@@ -42,3 +36,4 @@ function useVehicle(vehicle) {
 }
 useVehicle(vehicle1);
 useVehicle(vehicle2);
+//# sourceMappingURL=typeGuards.js.map

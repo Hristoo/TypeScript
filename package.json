@@ -1,8 +1,8 @@
 {
   "name": "typescript",
   "version": "1.0.0",
-  "description": "Understanding TypeScript - 2021 Edition",
-  "main": "Exam1_1.js",
+  "description": "Understanding TypeScript - 2022 Edition",
+  "main": "decorator.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "lite-server"

@@ -1,6 +1,8 @@
-var _a;
-var userDate = {
+const userDate = {
     id: 1,
-    name: "Ivan"
+    name: "Ivan",
+    // job: { title: "Employee", description: "Work hard"}
 };
-console.log((_a = userDate === null || userDate === void 0 ? void 0 : userDate.job) === null || _a === void 0 ? void 0 : _a.title);
+const title = userDate?.job?.title;
+console.log(title);
+//# sourceMappingURL=optionalChaning.js.map

@@ -1,22 +1,17 @@
-var Fish = /** @class */ (function () {
-    function Fish() {
-    }
-    Fish.prototype.swim = function () {
+class Fish {
+    swim() {
         console.log("Swimming...");
-    };
-    return Fish;
-}());
-var Bird = /** @class */ (function () {
-    function Bird() {
     }
-    Bird.prototype.fly = function () {
+}
+class Bird {
+    fly() {
         console.log("Flying...");
-    };
-    return Bird;
-}());
+    }
+}
 function isFish(pet) {
     return pet.swim !== undefined;
 }
-var fish = new Fish();
-var bird = new Bird();
+const fish = new Fish();
+const bird = new Bird();
 console.log(isFish(fish));
+//# sourceMappingURL=predicates.js.map
