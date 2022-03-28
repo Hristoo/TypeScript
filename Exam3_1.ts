@@ -56,16 +56,15 @@ const dataTypes = [
 ];
 
 class ExtendedArray extends Array {
-  firstInputArr: number[];
-  secondInputArr: number[];
+  firstInputArr: any[];
+  secondInputArr: number | any[];
 
-  constructor(inputArr1: number[], inputArr2?: number[]) {
+  constructor(inputArr1: any[], inputArr2?: number | any[]) {
     super();
     this.firstInputArr = inputArr1;
     this.secondInputArr = inputArr2;
   }
   oddCounter(): number {
-    
     let counter = 0;
 
     this[0].forEach((element) => {
@@ -76,8 +75,6 @@ class ExtendedArray extends Array {
 
     return counter;
   }
-
-
 
   bubbleSort() {
     let isDone = false;
@@ -231,38 +228,40 @@ class ExtendedArray extends Array {
   //   return firstInput;
   // }
 
-//   appender() {
-//     let firstInput = this[0];
-//     const secondInput = this[1];
-//     let cacheArrays: any[] = [];
-//     let cacheObjects = [];
+  appender() {
+    let firstInput = this.firstInputArr;
+    const secondInput =
+      typeof this.secondInputArr !== "number" ? this.secondInputArr : undefined;
+    let cacheArrays: any[] = [];
+    let cacheObjects = [];
 
-//     for (let j = 0; j < secondInput.length; j++) {
-//       if (Array.isArray(secondInput[j])) {
-//         cacheArrays = cacheArrays.concat(secondInput[j]);
-//       } else if (isObj(secondInput[j])) {
-//         cacheObjects.push(secondInput[j]);
-//       }
-//     }
+    for (let j = 0; j < secondInput.length; j++) {
+      if (Array.isArray(secondInput[j])) {
+        cacheArrays = cacheArrays.concat(secondInput[j]);
+      } else if (isObj(secondInput[j])) {
+        cacheObjects.push(secondInput[j]);
+      }
+    }
 
-//     for (let i = 0; i < firstInput.length; i++) {
-//       firstInput[i] = firstInput[i].concat(i % 2 ? cacheObjects : cacheArrays);
-//     }
+    for (let i = 0; i < firstInput.length; i++) {
+      firstInput[i] = firstInput[i].concat(i % 2 ? cacheObjects : cacheArrays);
+    }
 
-//     return firstInput;
-//   }
+    return firstInput;
+  }
 
-//   removeInner(): number[] {
-//     let arr = this[0];
-//     const num = this[1];
-//     const percentage = num / 100;
-//     const elCount = Math.ceil(arr.length * percentage);
-//     const evenElCount = 2 * Math.round(elCount / 2);
-//     const startIndex = Math.ceil((arr.length - evenElCount) / 2);
+  removeInner(): number[] {
+    let arr = this.firstInputArr;
+    const num =
+      typeof this.secondInputArr === "number" ? this.secondInputArr : undefined;
+    const percentage = num / 100;
+    const elCount = Math.ceil(arr.length * percentage);
+    const evenElCount = 2 * Math.round(elCount / 2);
+    const startIndex = Math.ceil((arr.length - evenElCount) / 2);
 
-//     arr.splice(startIndex, evenElCount);
-//     return arr;
-//   }
+    arr.splice(startIndex, evenElCount);
+    return arr;
+  }
 }
 
 // const extendedArray = new ExtendedArray(
@@ -293,9 +292,9 @@ class ExtendedArray extends Array {
 // output
 // [1, 2, 3, 4, 6, 9, 33, 44]
 
-const extendedArray = new ExtendedArray([6, 4, 3, 1, 9, 44, 33, 2]);
+// const extendedArray = new ExtendedArray([6, 4, 3, 1, 9, 44, 33, 2]);
 
-console.log(extendedArray.bubbleSort());
+// console.log(extendedArray.bubbleSort());
 
 // calculateDataTypes
 // InputEvent[6, "Test", "value", 1, undefined, null,  () => {console.log("Hello,  world!")}, {count: 5}]
@@ -319,16 +318,30 @@ console.log(extendedArray.bubbleSort());
 // output
 // [1, undefined, [1, 2, 3, () => {console.log("Hello,  world!")}, ["one", "five"], 6], "test", {name: "John Doe"}]
 
-// appender
-// input
-// [[1, 2, 3, 4], ["one", "two"], [5, 6]] ,
-// [null, () => {console.log("Hello,  world!")}, ["one", "five"], {role: "admin"}, {name: "John"}, [1000, 1001]]
+const extendedArray = new ExtendedArray(
+  [
+    [1, 2, 3, 4],
+    ["one", "two"],
+    [5, 6],
+  ],
+  [
+    null,
+    () => {
+      console.log("Hello,  world!");
+    },
+    ["one", "five"],
+    { role: "admin" },
+    { name: "John" },
+    [1000, 1001],
+  ]
+);
+console.log(extendedArray.appender());
 // output
 // [[1,2,3,4,"one","five",1000,1001],["one","two",{"role":"admin"},{"name":"John"}],[5,6,"one","five",1000,1001]]
 
-// removeInner
-// input
-// [1,2,3,4,5,6,7,8,9,10]
-// 50
+// const extendedArray = new ExtendedArray([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 50);
+
+// console.log(extendedArray.removeInner());
+
 // output
 // [1,2,9,10]
