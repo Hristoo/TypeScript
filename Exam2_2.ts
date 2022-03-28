@@ -1,27 +1,26 @@
-const arr1 = [1, undefined, [1, 2, 3], "test", { name: "John Doe" }];
+const person = { name: "John Doe" };
+type personType = { name: string };
 
-const arr2 = [
-  null,
-  () => {
-    console.log("Hello,  world!");
-  },
-  ["one", "five"],
-  undefined,
-  6,
-];
-
-function appender(firstInput: Array<any>, secondInput: Array<any>) {
-  let result = firstInput;
-
-  for (let i = 0; i < firstInput.length - 1; i++) {
-    result.splice(
-      i,
-      0,
-      secondInput.filter((el) => el != null)
-    );
-  }
-
-  return result;
+function findObj(data: any[], searchedObj: personType): boolean {
+  return data.some((element) => element === searchedObj);
 }
 
-console.log(appender(arr1, arr2));
+console.log(
+  findObj(
+    [
+      6,
+      "Test",
+      "value",
+      person,
+      1,
+      undefined,
+      null,
+      () => {
+        console.log("Hello,  world!");
+      },
+      { count: 5 },
+      { name: "John Doe" },
+    ],
+    person
+  )
+);

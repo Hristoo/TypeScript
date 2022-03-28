@@ -1,4 +1,4 @@
-let obj = {
+let obj15 = {
     cards: 6,
     label: "Test",
     description: "value",
@@ -12,7 +12,7 @@ let obj = {
     experience: { count: 5 },
   };
   
-  const dataTypes = [
+  const dataTypesWight = [
     {
       id: "numbers",
       typeOfValue: "number",
@@ -58,8 +58,8 @@ let obj = {
   function iterateProps(obj: object): number {
     let typesValues = {};
     let weight = 0;
-    let checked = [];
-    dataTypes.forEach((x) => (typesValues[x.typeOfValue] = x.weight));
+    let checked: object[] = [];
+    dataTypesWight.forEach((x) => (typesValues[x.typeOfValue] = x.weight));
   
     Object.values(obj).forEach((element) => {
       const typeOfElement = element != null ? typeof element : "null";
@@ -73,5 +73,5 @@ let obj = {
     return weight;
   }
   
-  console.log(iterateProps(obj));
+  console.log(iterateProps(obj15));
   
