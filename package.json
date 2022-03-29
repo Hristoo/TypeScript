@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/Hristoo/TypeScript.git"
   },
-  "type": "module",
+  "type": "commonjs",
   "author": "Hristo",
   "license": "ISC",
   "bugs": {
