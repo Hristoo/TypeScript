@@ -30,23 +30,19 @@ const timeIntervals: Interval[] = [
 ];
 
 type Interval = {
-    type: string,
-    milliseconds: number,
-  }
+  type: string;
+  milliseconds: number;
+};
 
 function timeDiff(newDate: Date, oldDate: Date): string {
   const diffTime = Math.abs(newDate.getTime() - oldDate.getTime());
 
-  
-  const timeInterval = timeIntervals.find(x => x.milliseconds < diffTime) ! ; // is it possible to be fixed diffrent way
+  const timeInterval = timeIntervals.find((x) => x.milliseconds < diffTime)!; // is it possible to be fixed diffrent way
 
-
-    const diff = Math.ceil(diffTime / timeInterval.milliseconds);
-
-
+  const diff = Math.ceil(diffTime / timeInterval.milliseconds);
 
   return `${diff} ${timeInterval.type}(s) ago`;
 }
 console.log(
-    timeDiff(new Date("2022-01-20 10:00:00"), new Date("2022-02-01 10:00:00"))
+  timeDiff(new Date("2022-01-20 10:00:00"), new Date("2022-02-01 10:00:00"))
 );

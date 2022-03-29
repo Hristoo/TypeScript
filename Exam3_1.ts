@@ -95,138 +95,43 @@ class ExtendedArray extends Array {
     return sortedArray;
   }
 
-  // calculateDataTypes() {
-  //   const result = {};
-  //   dataTypes.forEach((x) => (result[x.resultsProperty] = 0));
+  calculateDataTypes() {
+    const result = {};
+    dataTypes.forEach((x) => (result[x.resultsProperty] = 0));
 
-  //   this[0].forEach((element) => {
-  //     const typeOfElement = typeof element;
+    this.firstInputArr.forEach((element) => {
+      const typeOfElement = typeof element;
 
-  //     const types = dataTypes.filter((x) => x.typeOfValue === typeOfElement);
-  //     for (let i = 0; i < types.length; i++) {
-  //       if (!types[i].testerFunction) {
-  //         result[types[i].resultsProperty]++;
-  //         break;
-  //       } else if (types[i].testerFunction(element)) {
-  //         result[types[i].resultsProperty]++;
-  //         break;
-  //       }
-  //     }
-  //   });
+      const types = dataTypes.filter((x) => x.typeOfValue === typeOfElement);
+      for (let i = 0; i < types.length; i++) {
+        if (!types[i].testerFunction) {
+          result[types[i].resultsProperty]++;
+          break;
+        } else if (types[i].testerFunction(element)) {
+          result[types[i].resultsProperty]++;
+          break;
+        }
+      }
+    });
 
-  //   return result;
-  // }
-  // is not related to this class
-  // flatteningObj(obj: object, propName: string) {
-  //   const checked: object[] = [];
-  //   const flattenedObj = {};
-  //   propName = propName ? propName + "_" : "";
-  //   for (const key in obj) {
-  //     if (
-  //       isObj(obj[key]) ||
-  //       (Array.isArray(obj[key]) && !checked.includes(obj[key]))
-  //     ) {
-  //       checked.push(obj[key]);
-  //       Object.assign(
-  //         flattenedObj,
-  //         extendedArray.flatteningObj(obj[key], propName + key)
-  //       );
-  //     } else {
-  //       flattenedObj[propName + key] = obj[key];
-  //     }
-  //   }
+    return result;
+  }
+  concatTruthyElementsOfArray() {
+    let firstInput = this.firstInputArr;
+    const secondInput = this.secondInputArr;
+    const truthyElements =
+      typeof secondInput !== "number"
+        ? secondInput.filter((el) => !!el)
+        : undefined;
 
-  //   return flattenedObj;
-  // }
+    for (let i = 0; i < firstInput.length; i++) {
+      if (Array.isArray(firstInput[i])) {
+        firstInput[i] = firstInput[i].concat(truthyElements);
+      }
+    }
 
-  // initFlattening() {
-  //   for (let i = 0; i < this.length; i++) {
-  //     if (isObj(this[i]) || Array.isArray(this[i])) {
-  //       this[i] = extendedArray.flatteningObj(this[i]);
-  //     }
-  //   }
-
-  //   return JSON.stringify(this, null, 1);
-  // }
-  // compareObjects(sourceObj: object, searchedObj: object): boolean {
-  //   const searchedObjKeys = Object.keys(searchedObj);
-  //   const sourceObjKeys = Object.keys(sourceObj);
-  //   let result = false;
-  //   let checked = [];
-
-  //   for (const key of searchedObjKeys) {
-  //     if (sourceObjKeys.includes(key)) {
-  //       const isChecked = checked.includes(sourceObj[key]);
-  //       if (typeof sourceObj[key] !== typeof searchedObj[key] || isChecked) {
-  //         result = false;
-  //         break;
-  //       } else if (sourceObj[key] === searchedObj[key]) {
-  //         result = true;
-  //         break;
-  //       } else if (Array.isArray(sourceObj[key])) {
-  //         result = compareArrays(sourceObj[key], searchedObj[key]);
-  //         if (!result) {
-  //           break;
-  //         }
-  //       } else if (isObj(sourceObj[key])) {
-  //         checked.push(sourceObj[key]);
-  //         result = this.compareObjects(sourceObj[key], searchedObj[key]); // result = compareObjects(sourceObj[key], searchedObj[key]); which is correct
-  //       } else {
-  //         result = false;
-  //         break;
-  //       }
-  //     }
-  //   }
-
-  //   return result;
-  // }
-
-  // findObj() {
-  //   const data = this[0];
-  //   const searchObj = this[1];
-  //   if (!Array.isArray(data)) {
-  //     throw "Must pass an array variable!@";
-  //   }
-  //   const len = data.length;
-  //   let checked = [];
-  //   let result = false;
-  //   if (data.some((x) => x === searchObj)) {
-  //     result = true;
-  //   } else {
-  //     for (let i = 0; i < len; i++) {
-  //       const isChecked = checked.includes(data[i]);
-  //       if (isChecked) {
-  //         break;
-  //       }
-  //       if (Array.isArray(data[i])) {
-  //         checked.push(data[i]);
-  //         result = findObj(data[i], searchObj);
-  //       } else if (isObj(data[i])) {
-  //         checked.push(data[i]);
-  //         result = this.compareObjects(data[i], searchObj);
-  //       }
-
-  //       if (result) {
-  //         break;
-  //       }
-  //     }
-  //   }
-
-  //   return result;
-  // }
-  // concatTruthyElementsOfArray() {
-  //   let firstInput = this[0];
-  //   const secondInput = this[1];
-  //   const truthyElements = secondInput.filter((el) => !!el);
-
-  //   for (let i = 0; i < firstInput.length; i++) {
-  //     if (Array.isArray(firstInput[i])) {
-  //       firstInput[i] = firstInput[i].concat(truthyElements);
-  //     }
-  //   }
-
-  //   return firstInput;
-  // }
+    return firstInput;
+  }
 
   appender() {
     let firstInput = this.firstInputArr;
@@ -296,8 +201,24 @@ class ExtendedArray extends Array {
 
 // console.log(extendedArray.bubbleSort());
 
+
+
 // calculateDataTypes
-// InputEvent[6, "Test", "value", 1, undefined, null,  () => {console.log("Hello,  world!")}, {count: 5}]
+// InputEvent
+const extendedArray = new ExtendedArray([
+  6,
+  "Test",
+  "value",
+  1,
+  undefined,
+  null,
+  () => {
+    console.log("Hello,  world!");
+  },
+  { count: 5 },
+]);
+console.log(extendedArray.calculateDataTypes());
+
 // output
 // {
 //   nullCount: 1,
@@ -312,30 +233,33 @@ class ExtendedArray extends Array {
 // }
 
 // concatTruthyElementsOfArray
-// input
-// [1, undefined, [1, 2, 3], "test", {name: "John Doe"}]
+
+// const extendedArray = new ExtendedArray(
+//   [1, undefined, [1, 2, 3], "test", {name: "John Doe"}],
 // [null, () => {console.log("Hello,  world!")}, ["one", "five"], undefined, 6]
+// );
+// console.log(extendedArray.concatTruthyElementsOfArray());
 // output
 // [1, undefined, [1, 2, 3, () => {console.log("Hello,  world!")}, ["one", "five"], 6], "test", {name: "John Doe"}]
 
-const extendedArray = new ExtendedArray(
-  [
-    [1, 2, 3, 4],
-    ["one", "two"],
-    [5, 6],
-  ],
-  [
-    null,
-    () => {
-      console.log("Hello,  world!");
-    },
-    ["one", "five"],
-    { role: "admin" },
-    { name: "John" },
-    [1000, 1001],
-  ]
-);
-console.log(extendedArray.appender());
+// const extendedArray = new ExtendedArray(
+//   [
+//     [1, 2, 3, 4],
+//     ["one", "two"],
+//     [5, 6],
+//   ],
+//   [
+//     null,
+//     () => {
+//       console.log("Hello,  world!");
+//     },
+//     ["one", "five"],
+//     { role: "admin" },
+//     { name: "John" },
+//     [1000, 1001],
+//   ]
+// );
+// console.log(extendedArray.appender());
 // output
 // [[1,2,3,4,"one","five",1000,1001],["one","two",{"role":"admin"},{"name":"John"}],[5,6,"one","five",1000,1001]]
 

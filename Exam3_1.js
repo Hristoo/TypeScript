@@ -84,24 +84,25 @@ class ExtendedArray extends Array {
         }
         return sortedArray;
     }
-    // calculateDataTypes() {
-    //   const result = {};
-    //   dataTypes.forEach((x) => (result[x.resultsProperty] = 0));
-    //   this[0].forEach((element) => {
-    //     const typeOfElement = typeof element;
-    //     const types = dataTypes.filter((x) => x.typeOfValue === typeOfElement);
-    //     for (let i = 0; i < types.length; i++) {
-    //       if (!types[i].testerFunction) {
-    //         result[types[i].resultsProperty]++;
-    //         break;
-    //       } else if (types[i].testerFunction(element)) {
-    //         result[types[i].resultsProperty]++;
-    //         break;
-    //       }
-    //     }
-    //   });
-    //   return result;
-    // }
+    calculateDataTypes() {
+        const result = {};
+        dataTypes.forEach((x) => (result[x.resultsProperty] = 0));
+        this.firstInputArr.forEach((element) => {
+            const typeOfElement = typeof element;
+            const types = dataTypes.filter((x) => x.typeOfValue === typeOfElement);
+            for (let i = 0; i < types.length; i++) {
+                if (!types[i].testerFunction) {
+                    result[types[i].resultsProperty]++;
+                    break;
+                }
+                else if (types[i].testerFunction(element)) {
+                    result[types[i].resultsProperty]++;
+                    break;
+                }
+            }
+        });
+        return result;
+    }
     // is not related to this class
     // flatteningObj(obj: object, propName: string) {
     //   const checked: object[] = [];
@@ -192,17 +193,19 @@ class ExtendedArray extends Array {
     //   }
     //   return result;
     // }
-    // concatTruthyElementsOfArray() {
-    //   let firstInput = this[0];
-    //   const secondInput = this[1];
-    //   const truthyElements = secondInput.filter((el) => !!el);
-    //   for (let i = 0; i < firstInput.length; i++) {
-    //     if (Array.isArray(firstInput[i])) {
-    //       firstInput[i] = firstInput[i].concat(truthyElements);
-    //     }
-    //   }
-    //   return firstInput;
-    // }
+    concatTruthyElementsOfArray() {
+        let firstInput = this.firstInputArr;
+        const secondInput = this.secondInputArr;
+        const truthyElements = typeof secondInput !== "number"
+            ? secondInput.filter((el) => !!el)
+            : undefined;
+        for (let i = 0; i < firstInput.length; i++) {
+            if (Array.isArray(firstInput[i])) {
+                firstInput[i] = firstInput[i].concat(truthyElements);
+            }
+        }
+        return firstInput;
+    }
     appender() {
         let firstInput = this.firstInputArr;
         const secondInput = typeof this.secondInputArr !== "number" ? this.secondInputArr : undefined;
@@ -258,7 +261,9 @@ class ExtendedArray extends Array {
 // const extendedArray = new ExtendedArray([6, 4, 3, 1, 9, 44, 33, 2]);
 // console.log(extendedArray.bubbleSort());
 // calculateDataTypes
-// InputEvent[6, "Test", "value", 1, undefined, null,  () => {console.log("Hello,  world!")}, {count: 5}]
+// InputEvent
+const extendedArray = new ExtendedArray([6, "Test", "value", 1, undefined, null, () => { console.log("Hello,  world!"); }, { count: 5 }]);
+console.log(JSON.stringify(extendedArray.calculateDataTypes(),null,1));
 // output
 // {
 //   nullCount: 1,
@@ -272,26 +277,31 @@ class ExtendedArray extends Array {
 //   functions: 1
 // }
 // concatTruthyElementsOfArray
-// input
-// [1, undefined, [1, 2, 3], "test", {name: "John Doe"}]
+// const extendedArray = new ExtendedArray(
+//   [1, undefined, [1, 2, 3], "test", {name: "John Doe"}],
 // [null, () => {console.log("Hello,  world!")}, ["one", "five"], undefined, 6]
+// );
+// console.log(extendedArray.concatTruthyElementsOfArray());
 // output
 // [1, undefined, [1, 2, 3, () => {console.log("Hello,  world!")}, ["one", "five"], 6], "test", {name: "John Doe"}]
-const extendedArray = new ExtendedArray([
-    [1, 2, 3, 4],
-    ["one", "two"],
-    [5, 6],
-], [
-    null,
-    () => {
-        console.log("Hello,  world!");
-    },
-    ["one", "five"],
-    { role: "admin" },
-    { name: "John" },
-    [1000, 1001],
-]);
-console.log(extendedArray.appender());
+// const extendedArray = new ExtendedArray(
+//   [
+//     [1, 2, 3, 4],
+//     ["one", "two"],
+//     [5, 6],
+//   ],
+//   [
+//     null,
+//     () => {
+//       console.log("Hello,  world!");
+//     },
+//     ["one", "five"],
+//     { role: "admin" },
+//     { name: "John" },
+//     [1000, 1001],
+//   ]
+// );
+// console.log(extendedArray.appender());
 // output
 // [[1,2,3,4,"one","five",1000,1001],["one","two",{"role":"admin"},{"name":"John"}],[5,6,"one","five",1000,1001]]
 // const extendedArray = new ExtendedArray([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 50);
