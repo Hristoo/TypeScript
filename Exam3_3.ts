@@ -1,13 +1,19 @@
 import { numberToShortHex, numberToHex, isNumber } from "./lib.js";
 class Color {
-  constructor(...args) {
+  hexString: string;
+  opacity: number;
+  r: string | number;
+  g: string | number;
+  b: string | number;
+
+  constructor(...args: any[]) {
     let isHexValue: boolean;
 
     if (isNumber(args[0])) {
       this.isValidRgb(args);
     } else {
       isHexValue = true;
-      this.isValidHex(args[0], args[1]);
+      this.isValidHex(args[0]);
     }
 
     if (isHexValue) {
@@ -22,8 +28,10 @@ class Color {
     this.isValidOpacity(this.opacity);
   }
 
-  isValidRgb(args) {
-    const isValidRgb = args.slice(0,2).every((x) => isNumber(x) && x >= 0 && x <= 255);
+  isValidRgb(args: any[]): boolean {
+    const isValidRgb = args
+      .slice(0, 2)
+      .every((x) => isNumber(x) && x >= 0 && x <= 255);
 
     if (isValidRgb) {
       return true;
@@ -32,7 +40,7 @@ class Color {
     }
   }
 
-  isValidHex(hexString) {
+  isValidHex(hexString: string): boolean {
     const pattern = new RegExp("^#([a-fA-F0-9]){3}$|[a-fA-F0-9]{6}$");
     const isValidHex = pattern.test(hexString);
 
@@ -43,8 +51,10 @@ class Color {
     }
   }
 
-  isValidOpacity(opacity) {
-    const isValidOpacity = (isNumber(opacity) && opacity >= 0 && opacity <= 1) || opacity === undefined;
+  isValidOpacity(opacity: number): boolean {
+    const isValidOpacity =
+      (isNumber(opacity) && opacity >= 0 && opacity <= 1) ||
+      opacity === undefined;
 
     if (!isValidOpacity) {
       throw "Opacity value is not valid!";
@@ -52,7 +62,7 @@ class Color {
     return true;
   }
 
-  getColorRGB() {
+  getColorRGB(): string {
     let r = this.r;
     let g = this.g;
     let b = this.b;
@@ -79,10 +89,10 @@ class Color {
     }
   }
 
-  getColorShortHex() {
+  getColorShortHex(): string {
     const hex = this.hexString;
 
-    if (!hex) {
+    if (!hex && typeof this.r === "number"&& typeof this.g === "number"&& typeof this.b === "number") {
       return `#${numberToShortHex(this.r)}${numberToShortHex(
         this.g
       )}${numberToShortHex(this.b)}`;
@@ -91,17 +101,18 @@ class Color {
     }
   }
 
-  opacityToStr(opacity) {
-    opacity = Math.round(opacity * 255).toString(16);
-    return opacity === 0 ? "0" + opacity : opacity;
+  opacityToStr(opacityInput: number): string {
+    let opacity = Math.round(opacityInput * 255).toString(16);
+    return opacity === "0" ? "0" + opacity : opacity;
   }
-  getColorLongHex() {
+  getColorLongHex(): string {
     const hex = this.hexString;
-    const opacityHexString = this.opacity !== undefined
-      ? `${this.opacityToStr(this.opacity)}` // Math.round(Math.min(Math.max(this.opacity || 1, 0), 1) * 255).toString(16);
-      : "";
+    const opacityHexString =
+      this.opacity !== undefined
+        ? `${this.opacityToStr(this.opacity)}`
+        : "";
 
-    if (!hex) {
+    if (!hex && typeof this.r === "number"&& typeof this.g === "number"&& typeof this.b === "number") {
       return `#${numberToHex(this.r)}${numberToHex(this.g)}${numberToHex(
         this.b
       )}${opacityHexString}`;
@@ -113,6 +124,6 @@ class Color {
   }
 }
 
-const color = new Color(255,255,255, "undefined"); // ('FF0000', 1);  returns 'FF0000FF' - ('FF0000', 0.5);  returns 'FF000080'
+const color = new Color(255, 255, 255, "undefined"); // ('FF0000', 1);  returns 'FF0000FF' - ('FF0000', 0.5);  returns 'FF000080'
 
 console.log(color.getColorRGB());
