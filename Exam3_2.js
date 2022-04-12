@@ -40,10 +40,10 @@ const formatGroups = [
                     return monthNames[element.getMonth()].substring(0, 3);
                 case "MM":
                     return element.getMonth() > 9
-                        ? element.getMonth()
+                        ? element.getMonth().toString()
                         : "0" + element.getMonth();
                 case "M":
-                    return element.getMonth();
+                    return element.getMonth().toString();
                 default:
                     throw `token ${token} not supported`;
             }
@@ -201,7 +201,7 @@ const formatGroups = [
     {
         startingSymbol: "Q",
         tokenTypes: "Q",
-        formatter: (element, token) => {
+        formatter: (element) => {
             const m = Math.floor(element.getMonth() / 3) + 2;
             return m > 4 ? m - 4 : m;
         },
@@ -246,10 +246,6 @@ const timeIntervals32 = [
     },
 ];
 class ExDate extends Date {
-    constructor() {
-        super();
-        this.date = new Date();
-    }
     toDateString32(template) {
         let output = "";
         for (let i = 0; i < template.length; i++) {
@@ -258,7 +254,7 @@ class ExDate extends Date {
                 for (let j = 0; j < foundGroup.tokenTypes.length; j++) {
                     const lookAheadString = template.slice(i, i + foundGroup.tokenTypes[j].length);
                     if (lookAheadString === foundGroup.tokenTypes[j]) {
-                        output += foundGroup.formatter(this.date, lookAheadString);
+                        output += foundGroup.formatter(this, lookAheadString);
                         i = i + lookAheadString.length - 1;
                         break;
                     }
@@ -271,8 +267,8 @@ class ExDate extends Date {
         return output;
     }
     timeDiff(oldDate) {
-        const diffTime = Math.abs(this.date.getTime() - oldDate.getTime());
-        const timeInterval = timeIntervals.find((x) => x.milliseconds < diffTime);
+        const diffTime = Math.abs(this.getTime() - oldDate.getTime());
+        const timeInterval = timeIntervals32.find((x) => x.milliseconds < diffTime);
         const diff = Math.ceil(diffTime / timeInterval.milliseconds);
         return `${diff} ${timeInterval.type}(s) ago`;
     }

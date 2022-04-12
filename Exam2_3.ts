@@ -10,10 +10,11 @@ const arrTwo = [
   6,
 ];
 
-function appender(firstInput: any[], secondInput: unknown[]): unknown[] {
+function appender(firstInput: unknown[], secondInput: unknown[]): unknown[] {
   for (let i = 0; i < firstInput.length; i++) {
-    if (Array.isArray(firstInput[i])) {
-      firstInput[i].concat(secondInput.filter(el => !!el));
+    const curEl = firstInput[i];
+    if (Array.isArray(curEl)) {
+      curEl.concat(secondInput.filter(el => !!el));
     }
   }
 

@@ -52,10 +52,10 @@ const dataTypes1 = [
   ];
   const weight = 26;
   
-  function calcWeight(input: any[], typesValues: object): number {
+  function calcWeight(input: any[], typesValues: Types): number {
     let weight = 0;
     let checked: any[] = [];
-  
+
     input.forEach((element) => {
       const typeOfElement = element != null ? typeof element : "null";
       if (typeOfElement == "object" && !checked.includes(element)) {
@@ -67,9 +67,20 @@ const dataTypes1 = [
   
     return weight;
   }
-  
+
+  interface Types 
+  {
+    [key: string]: number;
+  }
+
+  const typesObj: Types = {
+    string: 8,
+    number: 4,
+    boolean: 2
+  }
+
   function findByWeight(arr: any[], weight: number): boolean {
-    const typesValues = {};
+    const typesValues: Types = {};
     const checked: unknown[] = [];
     let result = false;
     dataTypes1.forEach((x) => (typesValues[x.typeOfValue] = x.weight));

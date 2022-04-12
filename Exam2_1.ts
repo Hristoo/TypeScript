@@ -1,12 +1,16 @@
 let testData = [6, 4, 3, 1, 9, 44, 33, 2];
-const basicComparer = (left: number, right:number): boolean => {
+const basicComparer = (left: number, right: number): boolean => {
   return left < right;
 };
 
-let bubbleSort15 = function (input: number[], comparer: Function): number[] {
+let bubbleSort15 = (
+  input: number[],
+  comparer: (a: number, b: number) => boolean
+): number[] => {
   const len = input.length;
   let done = false;
 
+  // comparer( // types
   for (let i = 0; i < len; i++) {
     if (done) {
       break;
@@ -27,13 +31,16 @@ let bubbleSort15 = function (input: number[], comparer: Function): number[] {
 
 // console.log(bubbleSort15(testData, basicComparer));
 
-function swap(arr: number[], xp: number, yp: number): void {
-  let temp = arr[xp];
-  arr[xp] = arr[yp];
-  arr[yp] = temp;
+function swap(arr: number[], swappedIndex: number, swapperTndex: number): void {
+  let temp = arr[swappedIndex];
+  arr[swappedIndex] = arr[swapperTndex];
+  arr[swapperTndex] = temp;
 }
 
-function minMaxSort(input: number[], comparer: Function): number[] {
+function minMaxSort(
+  input: number[],
+  comparer: (a: number, b: number) => boolean
+): number[] {
   const n = input.length;
 
   for (let i = 0, j = n - 1; i < j; i++, j--) {
@@ -63,4 +70,3 @@ function minMaxSort(input: number[], comparer: Function): number[] {
 }
 
 console.log(minMaxSort(testData, basicComparer));
-// chech if arr is ordered

@@ -1,4 +1,4 @@
-import { isObj } from "./lib.js";
+import { isObj } from "./lib";
 
 const obj = {
   person: {

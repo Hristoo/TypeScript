@@ -40,7 +40,27 @@ function findFileByExt(folderPath, ext) {
     const filesAndDirs = fs.readdirSync(folderPath);
     const checked = [];
     let resultFromDirs = [];
-    return filesAndDirs.reduce(function (filePaths, filePathCurr) {
+    // return filesAndDirs.reduce(function (filePaths: any[], filePathCurr: string): string[] {
+    //   const base = path.join(folderPath, filePathCurr);
+    //   const isExcludedDirsAndFiles = base
+    //     .split("\\")
+    //     .some((excludedEl) => exclude.includes(excludedEl));
+    //   const isDirectory = fs.statSync(base).isDirectory();
+    //   const isDirChecked = checked.includes(base);
+    //   const fileExtention = filePathCurr.split(".").pop();
+    //   if (!isExcludedDirsAndFiles) {
+    //     if (isDirectory && !isDirChecked) {
+    //       checked.push(base);
+    //       return [filePaths, ...findFileByExt(base, fileExtention),fs.readdirSync(base)]; // ...findFileByExt(base, fileExtention, fs.readdirSync(base))
+    //     } else {
+    //       if (fileExtention === ext) {
+    //         return [...filePaths, base];
+    //       }
+    //     }
+    //   }
+    // }, []);
+    const result = [];
+    filesAndDirs.forEach(filePathCurr => {
         const base = path.join(folderPath, filePathCurr);
         const isExcludedDirsAndFiles = base
             .split("\\")
@@ -51,15 +71,17 @@ function findFileByExt(folderPath, ext) {
         if (!isExcludedDirsAndFiles) {
             if (isDirectory && !isDirChecked) {
                 checked.push(base);
-                return [...filePaths, ...findFileByExt(base, fileExtention)]; // ...findFileByExt(base, fileExtention, fs.readdirSync(base))
+                return findFileByExt(base, ext);
             }
             else {
                 if (fileExtention === ext) {
-                    return [...filePaths, base];
+                    checked.push(base);
+                    result.push(base);
                 }
             }
         }
-    }, []);
+    });
+    return result;
 }
 fs.stat(dir, function (err) {
     if (args.help) {

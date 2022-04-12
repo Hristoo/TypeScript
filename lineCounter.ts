@@ -45,12 +45,36 @@ function count(files: string[]) {
   }
 }
 
-function findFileByExt(folderPath: string, ext: string) :string[] {
+function findFileByExt(folderPath: string, ext: string): string[] {
   const filesAndDirs = fs.readdirSync(folderPath);
   const checked = [];
-  let resultFromDirs = [];
 
-  return filesAndDirs.reduce(function (filePaths: any[], filePathCurr: string): string[] {
+  // filePaths is undefined and broke the whole functionality
+
+  
+  // return filesAndDirs.reduce(function (filePaths: any[], filePathCurr: string): string[] { 
+  //   const base = path.join(folderPath, filePathCurr);
+  //   const isExcludedDirsAndFiles = base
+  //     .split("\\")
+  //     .some((excludedEl) => exclude.includes(excludedEl));
+  //   const isDirectory = fs.statSync(base).isDirectory();
+  //   const isDirChecked = checked.includes(base);
+  //   const fileExtention = filePathCurr.split(".").pop();
+
+  //   if (!isExcludedDirsAndFiles) {
+  //     if (isDirectory && !isDirChecked) {
+  //       checked.push(base);
+  //       return [filePaths, ...findFileByExt(base, fileExtention),fs.readdirSync(base)]; // ...findFileByExt(base, fileExtention, fs.readdirSync(base))
+  //     } else {
+  //       if (fileExtention === ext) {
+  //         return [...filePaths, base];
+  //       }
+  //     }
+  //   }
+  // }, []);
+
+  const result: string[] = [];
+  filesAndDirs.forEach((filePathCurr) => {
     const base = path.join(folderPath, filePathCurr);
     const isExcludedDirsAndFiles = base
       .split("\\")
@@ -58,22 +82,24 @@ function findFileByExt(folderPath: string, ext: string) :string[] {
     const isDirectory = fs.statSync(base).isDirectory();
     const isDirChecked = checked.includes(base);
     const fileExtention = filePathCurr.split(".").pop();
-
     if (!isExcludedDirsAndFiles) {
       if (isDirectory && !isDirChecked) {
         checked.push(base);
-        return [...filePaths, ...findFileByExt(base, fileExtention)]; // ...findFileByExt(base, fileExtention, fs.readdirSync(base))
+
+        return findFileByExt(base, ext);
       } else {
         if (fileExtention === ext) {
-          return [...filePaths, base];
+          checked.push(base);
+          result.push(base);
         }
       }
     }
-  }, []);
+  });
+  return result;
 }
 
 interface Error {
-    code?: string | number;
+  code?: string | number;
 }
 
 fs.stat(dir, function (err: Error) {

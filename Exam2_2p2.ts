@@ -1,10 +1,10 @@
 import { isObj } from "./lib.js";
 
 const person = { name: "John Doe" };
-type personType = { name: string };
+type PersonType = { name: string };
 let checked: any[];
 
-function findObj(data: any[], searchObj: personType): boolean {
+function findObj(data: any[], searchObj: PersonType): boolean {
   if (!Array.isArray(data)) {
     throw "Must pass an array variable!@";
   }

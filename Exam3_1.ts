@@ -1,6 +1,13 @@
-import { isObj, compareArrays } from "./lib.js";
+import { isObj, compareArrays } from "./lib";
 
-const dataTypes = [
+interface DataTypes {
+  id: string;
+  typeOfValue: string;
+  resultsProperty: string;
+  testerFunction?: Function;
+}
+
+const dataTypes: DataTypes[] = [
   {
     id: "nulls",
     typeOfValue: "object",
@@ -56,18 +63,11 @@ const dataTypes = [
 ];
 
 class ExtendedArray extends Array {
-  firstInputArr: any[];
-  secondInputArr: number | any[];
 
-  constructor(inputArr1: any[], inputArr2?: number | any[]) {
-    super();
-    this.firstInputArr = inputArr1;
-    this.secondInputArr = inputArr2;
-  }
   oddCounter(): number {
     let counter = 0;
-
-    this[0].forEach((element) => {
+    
+    this.forEach((element) => {
       if (element % 2 == 0) {
         counter++;
       }
@@ -76,39 +76,42 @@ class ExtendedArray extends Array {
     return counter;
   }
 
-  bubbleSort() {
+  bubbleSort(): number[] {
     let isDone = false;
-    let sortedArray = this.firstInputArr;
 
     while (!isDone) {
       isDone = true;
-      for (let i = 1; i < sortedArray.length; i += 1) {
-        if (sortedArray[i - 1] > sortedArray[i]) {
+      
+      for (let i = 1; i < this.length; i += 1) {
+        let curEl = this[i];
+        let prevEl = this[i];
+        if (this[i - 1] > curEl) {
           isDone = false;
-          let tmp = sortedArray[i - 1];
-          sortedArray[i - 1] = sortedArray[i];
-          sortedArray[i] = tmp;
+          let tmp = prevEl;
+          prevEl = curEl;
+          curEl = tmp;
         }
       }
     }
 
-    return sortedArray;
+    return this;
   }
 
-  calculateDataTypes() {
+  calculateDataTypes(): object {
     const result = {};
     dataTypes.forEach((x) => (result[x.resultsProperty] = 0));
 
-    this.firstInputArr.forEach((element) => {
+    this.forEach((element) => {
       const typeOfElement = typeof element;
 
       const types = dataTypes.filter((x) => x.typeOfValue === typeOfElement);
       for (let i = 0; i < types.length; i++) {
-        if (!types[i].testerFunction) {
-          result[types[i].resultsProperty]++;
+        let curType = types[i];
+        if (!curType.testerFunction) {
+          result[curType.resultsProperty]++;
           break;
-        } else if (types[i].testerFunction(element)) {
-          result[types[i].resultsProperty]++;
+        } else if (curType.testerFunction(element)) {
+          result[curType.resultsProperty]++;
           break;
         }
       }
@@ -116,9 +119,7 @@ class ExtendedArray extends Array {
 
     return result;
   }
-  concatTruthyElementsOfArray() {
-    let firstInput = this.firstInputArr;
-    const secondInput = this.secondInputArr;
+  concatTruthyElementsOfArray(firstInput: any[], secondInput: unknown[]): any[] {
     const truthyElements =
       typeof secondInput !== "number"
         ? secondInput.filter((el) => !!el)
@@ -133,10 +134,7 @@ class ExtendedArray extends Array {
     return firstInput;
   }
 
-  appender() {
-    let firstInput = this.firstInputArr;
-    const secondInput =
-      typeof this.secondInputArr !== "number" ? this.secondInputArr : undefined;
+  appender( secondInput: unknown[]): any[] {
     let cacheArrays: any[] = [];
     let cacheObjects = [];
 
@@ -148,26 +146,34 @@ class ExtendedArray extends Array {
       }
     }
 
-    for (let i = 0; i < firstInput.length; i++) {
-      firstInput[i] = firstInput[i].concat(i % 2 ? cacheObjects : cacheArrays);
+    for (let i = 0; i < this.length; i++) {
+      this[i] = this[i].concat(i % 2 ? cacheObjects : cacheArrays);
     }
 
-    return firstInput;
+    return this;
   }
 
-  removeInner(): number[] {
-    let arr = this.firstInputArr;
-    const num =
-      typeof this.secondInputArr === "number" ? this.secondInputArr : undefined;
-    const percentage = num / 100;
-    const elCount = Math.ceil(arr.length * percentage);
+  removeInner(numberInput: number): number[] {
+    
+    const percentage = numberInput / 100;
+    const elCount = Math.ceil(this.length * percentage);
     const evenElCount = 2 * Math.round(elCount / 2);
-    const startIndex = Math.ceil((arr.length - evenElCount) / 2);
+    const startIndex = Math.ceil((this.length - evenElCount) / 2);
 
-    arr.splice(startIndex, evenElCount);
-    return arr;
+    this.splice(startIndex, evenElCount);
+
+    return this;
   }
 }
+
+const arrTest = [1, 2, 3];
+
+// const extArr = new ExtendedArray(...arrTest);
+// console.log(extArr.slice(1, extArr.length - 1));
+
+const exArray = ExtendedArray.from(arrTest);
+console.log(exArray.slice(1, exArray.length - 1));
+
 
 // const extendedArray = new ExtendedArray(
 //   [1, undefined, [1, 2, 3], "test", { name: "John Doe" }],
@@ -201,23 +207,21 @@ class ExtendedArray extends Array {
 
 // console.log(extendedArray.bubbleSort());
 
-
-
 // calculateDataTypes
 // InputEvent
-const extendedArray = new ExtendedArray([
-  6,
-  "Test",
-  "value",
-  1,
-  undefined,
-  null,
-  () => {
-    console.log("Hello,  world!");
-  },
-  { count: 5 },
-]);
-console.log(extendedArray.calculateDataTypes());
+// const extendedArray = new ExtendedArray([
+//   6,
+//   "Test",
+//   "value",
+//   1,
+//   undefined,
+//   null,
+//   () => {
+//     console.log("Hello,  world!");
+//   },
+//   { count: 5 },
+// ]);
+// console.log(extendedArray.calculateDataTypes());
 
 // output
 // {

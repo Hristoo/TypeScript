@@ -1,7 +1,7 @@
 const person = { name: "John Doe" };
-type personType = { name: string };
+type PersonType = { name: string };
 
-function findObj(data: any[], searchedObj: personType): boolean {
+function findObj(data: any[], searchedObj: PersonType): boolean {
   return data.some((element) => element === searchedObj);
 }
 

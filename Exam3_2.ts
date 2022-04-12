@@ -27,14 +27,14 @@ const formatGroups = [
   {
     startingSymbol: "Y",
     tokenTypes: ["YYYY"],
-    formatter: (element: Date, token: string): number => {
+    formatter: (element: Date): number => {
       return element.getFullYear();
     },
   },
   {
     startingSymbol: "M",
     tokenTypes: ["MMMM", "MMM", "MM", "M"],
-    formatter: (element: Date, token: string): string | number => {
+    formatter: (element: Date, token: string): string => {
       switch (token) {
         case "MMMM":
           return monthNames[element.getMonth()];
@@ -42,10 +42,10 @@ const formatGroups = [
           return monthNames[element.getMonth()].substring(0, 3);
         case "MM":
           return element.getMonth() > 9
-            ? element.getMonth()
+            ? element.getMonth().toString()
             : "0" + element.getMonth();
         case "M":
-          return element.getMonth();
+          return element.getMonth().toString();
         default:
           throw `token ${token} not supported`;
       }
@@ -54,14 +54,14 @@ const formatGroups = [
   {
     startingSymbol: "D",
     tokenTypes: ["DD", "Do", "D"],
-    formatter: (element: Date, token: string): string | number => {
+    formatter: (element: Date, token: string): string => {
       switch (token) {
         case "DD":
           return element.getDate() > 9
-            ? element.getDate()
+            ? "" + element.getDate()
             : "0" + element.getDate();
         case "D":
-          return element.getDate();
+          return "" + element.getDate();
         case "Do":
           if (element.getDate() > 3 && element.getDate() < 21)
             return element.getDate() + "th";
@@ -104,16 +104,16 @@ const formatGroups = [
   {
     startingSymbol: "H",
     tokenTypes: ["HH", "H"],
-    formatter: (element: Date, token: string): string | number => {
+    formatter: (element: Date, token: string): string => {
       switch (token) {
         case "HH":
           if (element.getHours() > 9) {
             return element.getHours() < 9
               ? "0" + element.getHours()
-              : element.getHours();
+              : "" + element.getHours();
           }
         case "H":
-          return element.getHours();
+          return "" + element.getHours();
         default:
           throw `token ${token} not supported`;
       }
@@ -122,14 +122,14 @@ const formatGroups = [
   {
     startingSymbol: "m",
     tokenTypes: ["mm", "m"],
-    formatter: (element: Date, token: string): string | number => {
+    formatter: (element: Date, token: string): string => {
       switch (token) {
         case "mm":
           return element.getMinutes() > 9
-            ? element.getMinutes()
+            ? "" + element.getMinutes()
             : "0" + element.getMinutes();
         case "m":
-          return element.getMinutes();
+          return "" + element.getMinutes();
         default:
           throw `token ${token} not supported`;
       }
@@ -138,14 +138,14 @@ const formatGroups = [
   {
     startingSymbol: "s",
     tokenTypes: ["ss", "s"],
-    formatter: (element: Date, token: string): string | number => {
+    formatter: (element: Date, token: string): string => {
       switch (token) {
         case "ss":
           return element.getSeconds() > 9
-            ? element.getSeconds()
+            ? "" + element.getSeconds()
             : "0" + element.getSeconds();
         case "s":
-          return element.getSeconds();
+          return "" + element.getSeconds();
         default:
           throw `token ${token} not supported`;
       }
@@ -154,7 +154,7 @@ const formatGroups = [
   {
     startingSymbol: "A",
     tokenTypes: "A",
-    formatter: (element:Date): string => {
+    formatter: (element: Date): string => {
       return element.getHours() >= 12 ? "PM" : "AM";
     },
   },
@@ -174,15 +174,21 @@ const formatGroups = [
       switch (token) {
         case "WW":
           yearStart = new Date(Date.UTC(element.getUTCFullYear(), 0, 1));
-          weekNo = Math.ceil(((element.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+          weekNo = Math.ceil(
+            ((element.getTime() - yearStart.getTime()) / 86400000 + 1) / 7
+          );
           return weekNo > 9 ? weekNo + " " : "0" + weekNo + " ";
         case "W":
           yearStart = new Date(Date.UTC(element.getUTCFullYear(), 0, 1));
-          weekNo = Math.ceil(((element.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+          weekNo = Math.ceil(
+            ((element.getTime() - yearStart.getTime()) / 86400000 + 1) / 7
+          );
           return weekNo + " ";
         case "Wo":
           yearStart = new Date(Date.UTC(element.getUTCFullYear(), 0, 1));
-          weekNo = Math.ceil(((element.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+          weekNo = Math.ceil(
+            ((element.getTime() - yearStart.getTime()) / 86400000 + 1) / 7
+          );
           if (weekNo > 3 && weekNo < 21) return weekNo + "th";
           switch (weekNo % 10) {
             case 1:
@@ -202,7 +208,7 @@ const formatGroups = [
   {
     startingSymbol: "Q",
     tokenTypes: "Q",
-    formatter: (element: Date, token: string) => {
+    formatter: (element: Date): number => {
       const m = Math.floor(element.getMonth() / 3) + 2;
       return m > 4 ? m - 4 : m;
     },
@@ -220,7 +226,12 @@ const formatGroups = [
   },
 ];
 
-const timeIntervals32 = [
+interface IntervalsType {
+  type: string;
+  milliseconds: number;
+}
+
+const timeIntervals32: IntervalsType[] = [
   {
     type: "year",
     milliseconds: 31556952000,
@@ -251,12 +262,6 @@ const timeIntervals32 = [
   },
 ];
 class ExDate extends Date {
-  date: Date;
-
-  constructor() {
-    super();
-    this.date = new Date();
-  }
   toDateString32(template: string): string {
     let output = "";
 
@@ -271,7 +276,7 @@ class ExDate extends Date {
             i + foundGroup.tokenTypes[j].length
           );
           if (lookAheadString === foundGroup.tokenTypes[j]) {
-            output += foundGroup.formatter(this.date, lookAheadString);
+            output += foundGroup.formatter(this, lookAheadString);
             i = i + lookAheadString.length - 1;
             break;
           }
@@ -283,8 +288,10 @@ class ExDate extends Date {
     return output;
   }
   timeDiff(oldDate: Date): string {
-    const diffTime = Math.abs(this.date.getTime() - oldDate.getTime());
-    const timeInterval = timeIntervals.find((x) => x.milliseconds < diffTime)!;
+    const diffTime = Math.abs(this.getTime() - oldDate.getTime());
+    const timeInterval = timeIntervals32.find(
+      (x) => x.milliseconds < diffTime
+    )!;
     const diff = Math.ceil(diffTime / timeInterval.milliseconds);
 
     return `${diff} ${timeInterval.type}(s) ago`;

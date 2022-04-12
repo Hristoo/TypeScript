@@ -1,5 +1,4 @@
-
-import { isObj } from "./lib.js";
+import { isObj } from "./lib";
 
 const arr1 = [
   [1, 2, 3, 4],
@@ -19,20 +18,24 @@ const arr2 = [
 ];
 
 //todo memoization for optimizing
-function appender(firstInput: any[], secondInput: unknown[]): unknown[] {
+function appender(firstInput: unknown[], secondInput: unknown[]): unknown[] {
   let cacheArrays: unknown[] = [];
-  let cacheObjects = [];
+  let cacheObjects: object[] = [];
 
   for (let j = 0; j < secondInput.length; j++) {
+    const secInputEl = secondInput[j]
     if (Array.isArray(secondInput[j])) {
       cacheArrays = cacheArrays.concat(secondInput[j]);
-    } else if (isObj(secondInput[j])) {
-      cacheObjects.push(secondInput[j]);
+    } else if (isObj(secInputEl)) {
+      cacheObjects.push(secInputEl);
     }
   }
 
   for (let i = 0; i < firstInput.length; i++) {
-    firstInput[i] = firstInput[i].concat(i % 2 ? cacheObjects : cacheArrays);
+    let curEl = firstInput[i];
+    if (Array.isArray(curEl)) {
+      curEl = curEl.concat(i % 2 ? cacheObjects : cacheArrays);
+    }
   }
 
   return firstInput;

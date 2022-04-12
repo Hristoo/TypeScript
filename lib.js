@@ -1,5 +1,8 @@
+// export function isObj(value: unknown): boolean {
+//     return typeof value === "object" && value != null && !Array.isArray(value);
+//   }
 export function isObj(value) {
-    return typeof value === "object" && value != null && !Array.isArray(value);
+    return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 export function isNumber(value) {
     return typeof value === "number";

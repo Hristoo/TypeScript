@@ -1,10 +1,11 @@
 import { dateFormat, utfTimeToLocal } from "./lib34.js";
 
 class Watch {
-    date: Date;
-    startedTimers: Map<string,any>;
-    startTime: number;
-  constructor(date) {
+  date: Date;
+  startedTimers: Map<string, NodeJS.Timer>;
+  startTime: number = Date.now();
+
+  constructor(date: Date, callback?: Function) {
     this.date = date || new Date();
     this.startedTimers = new Map();
   }
@@ -12,7 +13,7 @@ class Watch {
   showTime(
     format = "HH:mm:ss",
     timeZone = "Europe/Sofia",
-    callback = undefined
+    callback?: (result: (string | Date)[]) => void
   ) {
     const utfDate = new Date(utfTimeToLocal(this.date, timeZone));
 
@@ -26,9 +27,11 @@ class Watch {
     }
   }
 
-  update(date: Date, format :string, timeZone: string, callback: Function) {
+  update(date: Date, format: string, timeZone: string, callback?: Function) {
     date.setSeconds(date.getSeconds() + 1);
-    const formatedTime = format ? dateFormat(date, format, timeZone) : date;
+    const formatedTime: string | Date = format
+      ? dateFormat(date, format, timeZone)
+      : date;
     if (callback !== undefined) {
       callback([formatedTime]);
     }
@@ -38,7 +41,10 @@ class Watch {
   hideTime(timeZone: string) {
     if (this.startedTimers.has(timeZone)) {
       console.log(`You stopped the watch for timezone ${timeZone}`);
-      clearInterval(this.startedTimers.get(timeZone));
+      const timer = this.startedTimers.get(timeZone);
+      if (timer) {
+        clearInterval(timer);
+      }
     }
   }
 
@@ -53,7 +59,7 @@ class Watch {
   }
 }
 
-function sendData(arr: number[]) {
+function sendData(arr: (string | Date)[]) {
   console.log("It's to late: ", arr.join("/"));
 }
 

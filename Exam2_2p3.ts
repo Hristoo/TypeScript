@@ -1,4 +1,4 @@
-import { isObj, compareArrays } from "./lib.js";
+import { isObj, compareArrays } from "./lib";
 
 function compareObjects(sourceObj: object, searchedObj: object): boolean {
   const searchedObjKeys = Object.keys(searchedObj);
@@ -19,13 +19,13 @@ function compareObjects(sourceObj: object, searchedObj: object): boolean {
       } else if (sourceObjValue === searchedObjValue) {
         result = true;
         break;
-      } else if (Array.isArray(sourceObjValue)) {
+      } else if (Array.isArray(sourceObjValue) && Array.isArray(searchedObjValue)) {
         result = compareArrays(sourceObjValue, searchedObjValue);
 
         if (!result) {
           break;
         }
-      } else if (isObj(sourceObjValue)) {
+      } else if (isObj(sourceObjValue) && isObj(searchedObjValue)) {
         checked.push(sourceObjValue);
         result = compareObjects(sourceObjValue, searchedObjValue);
 

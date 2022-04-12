@@ -54,148 +54,53 @@ const dataTypes = [
     },
 ];
 class ExtendedArray extends Array {
-    constructor(inputArr1, inputArr2) {
-        super();
-        this.firstInputArr = inputArr1;
-        this.secondInputArr = inputArr2;
-    }
     oddCounter() {
         let counter = 0;
-        this[0].forEach((element) => {
+        this.forEach((element) => {
             if (element % 2 == 0) {
                 counter++;
             }
         });
         return counter;
     }
-    bubbleSort() {
+    bubbleSort(input) {
         let isDone = false;
-        let sortedArray = this.firstInputArr;
         while (!isDone) {
             isDone = true;
-            for (let i = 1; i < sortedArray.length; i += 1) {
-                if (sortedArray[i - 1] > sortedArray[i]) {
+            for (let i = 1; i < input.length; i += 1) {
+                let curEl = input[i];
+                let prevEl = input[i];
+                if (input[i - 1] > curEl) {
                     isDone = false;
-                    let tmp = sortedArray[i - 1];
-                    sortedArray[i - 1] = sortedArray[i];
-                    sortedArray[i] = tmp;
+                    let tmp = prevEl;
+                    prevEl = curEl;
+                    curEl = tmp;
                 }
             }
         }
-        return sortedArray;
+        return input;
     }
-    calculateDataTypes() {
+    calculateDataTypes(input) {
         const result = {};
         dataTypes.forEach((x) => (result[x.resultsProperty] = 0));
-        this.firstInputArr.forEach((element) => {
+        input.forEach((element) => {
             const typeOfElement = typeof element;
             const types = dataTypes.filter((x) => x.typeOfValue === typeOfElement);
             for (let i = 0; i < types.length; i++) {
-                if (!types[i].testerFunction) {
-                    result[types[i].resultsProperty]++;
+                let curType = types[i];
+                if (!curType.testerFunction) {
+                    result[curType.resultsProperty]++;
                     break;
                 }
-                else if (types[i].testerFunction(element)) {
-                    result[types[i].resultsProperty]++;
+                else if (curType.testerFunction(element)) {
+                    result[curType.resultsProperty]++;
                     break;
                 }
             }
         });
         return result;
     }
-    // is not related to this class
-    // flatteningObj(obj: object, propName: string) {
-    //   const checked: object[] = [];
-    //   const flattenedObj = {};
-    //   propName = propName ? propName + "_" : "";
-    //   for (const key in obj) {
-    //     if (
-    //       isObj(obj[key]) ||
-    //       (Array.isArray(obj[key]) && !checked.includes(obj[key]))
-    //     ) {
-    //       checked.push(obj[key]);
-    //       Object.assign(
-    //         flattenedObj,
-    //         extendedArray.flatteningObj(obj[key], propName + key)
-    //       );
-    //     } else {
-    //       flattenedObj[propName + key] = obj[key];
-    //     }
-    //   }
-    //   return flattenedObj;
-    // }
-    // initFlattening() {
-    //   for (let i = 0; i < this.length; i++) {
-    //     if (isObj(this[i]) || Array.isArray(this[i])) {
-    //       this[i] = extendedArray.flatteningObj(this[i]);
-    //     }
-    //   }
-    //   return JSON.stringify(this, null, 1);
-    // }
-    // compareObjects(sourceObj: object, searchedObj: object): boolean {
-    //   const searchedObjKeys = Object.keys(searchedObj);
-    //   const sourceObjKeys = Object.keys(sourceObj);
-    //   let result = false;
-    //   let checked = [];
-    //   for (const key of searchedObjKeys) {
-    //     if (sourceObjKeys.includes(key)) {
-    //       const isChecked = checked.includes(sourceObj[key]);
-    //       if (typeof sourceObj[key] !== typeof searchedObj[key] || isChecked) {
-    //         result = false;
-    //         break;
-    //       } else if (sourceObj[key] === searchedObj[key]) {
-    //         result = true;
-    //         break;
-    //       } else if (Array.isArray(sourceObj[key])) {
-    //         result = compareArrays(sourceObj[key], searchedObj[key]);
-    //         if (!result) {
-    //           break;
-    //         }
-    //       } else if (isObj(sourceObj[key])) {
-    //         checked.push(sourceObj[key]);
-    //         result = this.compareObjects(sourceObj[key], searchedObj[key]); // result = compareObjects(sourceObj[key], searchedObj[key]); which is correct
-    //       } else {
-    //         result = false;
-    //         break;
-    //       }
-    //     }
-    //   }
-    //   return result;
-    // }
-    // findObj() {
-    //   const data = this[0];
-    //   const searchObj = this[1];
-    //   if (!Array.isArray(data)) {
-    //     throw "Must pass an array variable!@";
-    //   }
-    //   const len = data.length;
-    //   let checked = [];
-    //   let result = false;
-    //   if (data.some((x) => x === searchObj)) {
-    //     result = true;
-    //   } else {
-    //     for (let i = 0; i < len; i++) {
-    //       const isChecked = checked.includes(data[i]);
-    //       if (isChecked) {
-    //         break;
-    //       }
-    //       if (Array.isArray(data[i])) {
-    //         checked.push(data[i]);
-    //         result = findObj(data[i], searchObj);
-    //       } else if (isObj(data[i])) {
-    //         checked.push(data[i]);
-    //         result = this.compareObjects(data[i], searchObj);
-    //       }
-    //       if (result) {
-    //         break;
-    //       }
-    //     }
-    //   }
-    //   return result;
-    // }
-    concatTruthyElementsOfArray() {
-        let firstInput = this.firstInputArr;
-        const secondInput = this.secondInputArr;
+    concatTruthyElementsOfArray(firstInput, secondInput) {
         const truthyElements = typeof secondInput !== "number"
             ? secondInput.filter((el) => !!el)
             : undefined;
@@ -206,9 +111,7 @@ class ExtendedArray extends Array {
         }
         return firstInput;
     }
-    appender() {
-        let firstInput = this.firstInputArr;
-        const secondInput = typeof this.secondInputArr !== "number" ? this.secondInputArr : undefined;
+    appender(firstInput, secondInput) {
         let cacheArrays = [];
         let cacheObjects = [];
         for (let j = 0; j < secondInput.length; j++) {
@@ -224,17 +127,20 @@ class ExtendedArray extends Array {
         }
         return firstInput;
     }
-    removeInner() {
-        let arr = this.firstInputArr;
-        const num = typeof this.secondInputArr === "number" ? this.secondInputArr : undefined;
-        const percentage = num / 100;
-        const elCount = Math.ceil(arr.length * percentage);
+    removeInner(input, numberInput) {
+        const percentage = numberInput / 100;
+        const elCount = Math.ceil(input.length * percentage);
         const evenElCount = 2 * Math.round(elCount / 2);
-        const startIndex = Math.ceil((arr.length - evenElCount) / 2);
-        arr.splice(startIndex, evenElCount);
-        return arr;
+        const startIndex = Math.ceil((input.length - evenElCount) / 2);
+        input.splice(startIndex, evenElCount);
+        return input;
     }
 }
+const arrTest = [1, 2, 3];
+// const extArr = new ExtendedArray(...arrTest);
+// console.log(extArr.slice(1, extArr.length - 1));
+const exArray = ExtendedArray.from(arrTest);
+console.log(exArray.slice(1, exArray.length - 1));
 // const extendedArray = new ExtendedArray(
 //   [1, undefined, [1, 2, 3], "test", { name: "John Doe" }],
 //   [
@@ -262,8 +168,19 @@ class ExtendedArray extends Array {
 // console.log(extendedArray.bubbleSort());
 // calculateDataTypes
 // InputEvent
-const extendedArray = new ExtendedArray([6, "Test", "value", 1, undefined, null, () => { console.log("Hello,  world!"); }, { count: 5 }]);
-console.log(JSON.stringify(extendedArray.calculateDataTypes(),null,1));
+// const extendedArray = new ExtendedArray([
+//   6,
+//   "Test",
+//   "value",
+//   1,
+//   undefined,
+//   null,
+//   () => {
+//     console.log("Hello,  world!");
+//   },
+//   { count: 5 },
+// ]);
+// console.log(extendedArray.calculateDataTypes());
 // output
 // {
 //   nullCount: 1,
