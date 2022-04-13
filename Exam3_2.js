@@ -25,7 +25,7 @@ const formatGroups = [
     {
         startingSymbol: "Y",
         tokenTypes: ["YYYY"],
-        formatter: (element, token) => {
+        formatter: (element) => {
             return element.getFullYear();
         },
     },
@@ -56,10 +56,10 @@ const formatGroups = [
             switch (token) {
                 case "DD":
                     return element.getDate() > 9
-                        ? element.getDate()
+                        ? "" + element.getDate()
                         : "0" + element.getDate();
                 case "D":
-                    return element.getDate();
+                    return "" + element.getDate();
                 case "Do":
                     if (element.getDate() > 3 && element.getDate() < 21)
                         return element.getDate() + "th";
@@ -94,7 +94,7 @@ const formatGroups = [
     },
     {
         startingSymbol: "E",
-        tokenTypes: "E",
+        tokenTypes: ["E"],
         formatter: (element) => {
             return element.getDay();
         },
@@ -108,10 +108,10 @@ const formatGroups = [
                     if (element.getHours() > 9) {
                         return element.getHours() < 9
                             ? "0" + element.getHours()
-                            : element.getHours();
+                            : "" + element.getHours();
                     }
                 case "H":
-                    return element.getHours();
+                    return "" + element.getHours();
                 default:
                     throw `token ${token} not supported`;
             }
@@ -124,10 +124,10 @@ const formatGroups = [
             switch (token) {
                 case "mm":
                     return element.getMinutes() > 9
-                        ? element.getMinutes()
+                        ? "" + element.getMinutes()
                         : "0" + element.getMinutes();
                 case "m":
-                    return element.getMinutes();
+                    return "" + element.getMinutes();
                 default:
                     throw `token ${token} not supported`;
             }
@@ -140,10 +140,10 @@ const formatGroups = [
             switch (token) {
                 case "ss":
                     return element.getSeconds() > 9
-                        ? element.getSeconds()
+                        ? "" + element.getSeconds()
                         : "0" + element.getSeconds();
                 case "s":
-                    return element.getSeconds();
+                    return "" + element.getSeconds();
                 default:
                     throw `token ${token} not supported`;
             }
@@ -151,14 +151,14 @@ const formatGroups = [
     },
     {
         startingSymbol: "A",
-        tokenTypes: "A",
+        tokenTypes: ["A"],
         formatter: (element) => {
             return element.getHours() >= 12 ? "PM" : "AM";
         },
     },
     {
         startingSymbol: "a",
-        tokenTypes: "a",
+        tokenTypes: ["a"],
         formatter: (element) => {
             return element.getHours() >= 12 ? "pm" : "am";
         },
@@ -200,9 +200,9 @@ const formatGroups = [
     },
     {
         startingSymbol: "Q",
-        tokenTypes: "Q",
+        tokenTypes: ["Q"],
         formatter: (element) => {
-            const m = Math.floor(element.getMonth() / 3) + 2;
+            const m = Math.floor(element.getMonth() / 3);
             return m > 4 ? m - 4 : m;
         },
     },
@@ -274,6 +274,6 @@ class ExDate extends Date {
     }
 }
 const exDate = new ExDate();
-console.log(exDate.toDateString32("YYYY-MMM-DD HH:mm:ss Is my proof of concept!")
+console.log(exDate.toDateString32("YYYY-MMMM-D HH:mm:ss z - a Is my proof of concept!")
 //   exDate.timeDiff(new Date("2022-03-21 17:58:00"))
 );

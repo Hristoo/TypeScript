@@ -1,5 +1,9 @@
 import { dateFormat, utfTimeToLocal } from "./lib34.js";
 
+type StringOrDateType = (string | Date)[];
+
+type CallbackType = (result: StringOrDateType) => void;
+
 class Watch {
   date: Date;
   startedTimers: Map<string, NodeJS.Timer>;
@@ -13,7 +17,7 @@ class Watch {
   showTime(
     format = "HH:mm:ss",
     timeZone = "Europe/Sofia",
-    callback?: (result: (string | Date)[]) => void
+    callback?: CallbackType
   ) {
     const utfDate = new Date(utfTimeToLocal(this.date, timeZone));
 
@@ -27,7 +31,7 @@ class Watch {
     }
   }
 
-  update(date: Date, format: string, timeZone: string, callback?: Function) {
+  update(date: Date, format: string, timeZone: string, callback?: CallbackType) {
     date.setSeconds(date.getSeconds() + 1);
     const formatedTime: string | Date = format
       ? dateFormat(date, format, timeZone)
@@ -59,7 +63,7 @@ class Watch {
   }
 }
 
-function sendData(arr: (string | Date)[]) {
+function sendData(arr: StringOrDateType) {
   console.log("It's to late: ", arr.join("/"));
 }
 

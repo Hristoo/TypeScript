@@ -12,19 +12,18 @@ class Color {
   constructor(...args: any[]) {
     if (typeof args[0] === "string") {
       this.hexString = args[0];
-      this.opacity = args[1];
+      this.opacity = args[1] || this.opacity;
+      this.isValidHex(this.hexString);
     }
-
-    this.isValidHex(this.hexString);
 
     if (args.length >= 3) {
       this.r = args[0];
       this.g = args[1];
       this.b = args[2];
-      this.opacity = args[3];
+      this.opacity = args[3] || this.opacity;
+      this.isValidRgb(args);
     }
 
-    this.isValidRgb(args);
     this.isValidOpacity();
   }
 
@@ -60,27 +59,29 @@ class Color {
   }
 
   getColorRGB(): string {
-    let rHex = "";
-    let gHex = "";
-    let bHex = "";
+    let r = this.r;
+    let g = this.g;
+    let b = this.b;
+    let opacity = this.opacity;
+
     if (this.hexString) {
       const hex = this.hexString;
 
-      if (hex.length == 4) {
-        rHex = `0x${hex[1] + hex[1]}`;
-        gHex = `0x${hex[2] + hex[2]}`;
-        bHex = `0x${hex[3] + hex[3]}`;
-      } else if (hex.length == 7) {
-        rHex = `0x${hex[1] + hex[2]}`;
-        gHex = `0x${hex[3] + hex[4]}`;
-        bHex = `0x${hex[5] + hex[6]}`;
+      if (hex.length <= 4) {
+        // r = `0x${hex[1] + hex[1]}`;
+        // g = `0x${hex[2] + hex[2]}`;
+        // b = `0x${hex[3] + hex[3]}`;
+      } else if (hex.length >= 7) {
+        r = parseInt(hex[1],16) + parseInt(hex[2],16);
+        g = parseInt(hex[3],16) + parseInt(hex[4],16);;
+        b = parseInt(hex[5],16) + parseInt(hex[6],16);
       }
     }
 
     if (this.opacity) {
-      return `rgba(${rHex}, ${gHex}, ${bHex}, ${this.opacity});`;
+      return `rgba(${r}, ${g}, ${b}, ${this.opacity});`;
     } else {
-      return `rgb(${rHex}, ${gHex}, ${bHex});`;
+      return `rgb(${r}, ${g}, ${b});`;
     }
   }
 
@@ -117,7 +118,6 @@ class Color {
   }
 }
 
-const color = new Color("ffffff", 1); // ('FF0000', 1);  returns 'FF0000FF' - ('FF0000', 0.5);  returns 'FF000080'
+const color = new Color("ffff00", 0.2); // ('FF0000', 1);  returns 'FF0000FF' - ('FF0000', 0.5);  returns 'FF000080'
 
-color.getColorRGB();
 console.log(color.getColorRGB());

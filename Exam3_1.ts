@@ -119,19 +119,19 @@ class ExtendedArray extends Array {
 
     return result;
   }
-  concatTruthyElementsOfArray(firstInput: any[], secondInput: unknown[]): any[] {
+  concatTruthyElementsOfArray(secondInput: unknown[]): any[] {
     const truthyElements =
       typeof secondInput !== "number"
         ? secondInput.filter((el) => !!el)
         : undefined;
 
-    for (let i = 0; i < firstInput.length; i++) {
-      if (Array.isArray(firstInput[i])) {
-        firstInput[i] = firstInput[i].concat(truthyElements);
+    for (let i = 0; i < this.length; i++) {
+      if (Array.isArray(this[i])) {
+        this[i] = this[i].concat(truthyElements);
       }
     }
 
-    return firstInput;
+    return this;
   }
 
   appender( secondInput: unknown[]): any[] {

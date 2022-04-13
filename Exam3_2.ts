@@ -23,7 +23,13 @@ const daysNames = [
   "Saturday",
 ];
 
-const formatGroups = [
+interface FormatGroups {
+  startingSymbol: string;
+  tokenTypes: string[];
+  formatter: Function;
+}
+
+const formatGroups: FormatGroups[] = [
   {
     startingSymbol: "Y",
     tokenTypes: ["YYYY"],
@@ -96,7 +102,7 @@ const formatGroups = [
   },
   {
     startingSymbol: "E",
-    tokenTypes: "E",
+    tokenTypes: ["E"],
     formatter: (element: Date): number => {
       return element.getDay();
     },
@@ -153,14 +159,14 @@ const formatGroups = [
   },
   {
     startingSymbol: "A",
-    tokenTypes: "A",
+    tokenTypes: ["A"],
     formatter: (element: Date): string => {
       return element.getHours() >= 12 ? "PM" : "AM";
     },
   },
   {
     startingSymbol: "a",
-    tokenTypes: "a",
+    tokenTypes: ["a"],
     formatter: (element: Date): string => {
       return element.getHours() >= 12 ? "pm" : "am";
     },
@@ -207,9 +213,9 @@ const formatGroups = [
   },
   {
     startingSymbol: "Q",
-    tokenTypes: "Q",
+    tokenTypes: ["Q"],
     formatter: (element: Date): number => {
-      const m = Math.floor(element.getMonth() / 3) + 2;
+      const m = Math.floor(element.getMonth() / 3);
       return m > 4 ? m - 4 : m;
     },
   },
@@ -300,6 +306,6 @@ class ExDate extends Date {
 
 const exDate = new ExDate();
 console.log(
-  exDate.toDateString32("YYYY-MMM-DD HH:mm:ss Is my proof of concept!")
+  exDate.toDateString32("YYYY-MMM-DD HH:mm:ss Q a Is my proof of concept!")
   //   exDate.timeDiff(new Date("2022-03-21 17:58:00"))
 );
